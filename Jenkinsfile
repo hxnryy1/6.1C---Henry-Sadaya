@@ -47,9 +47,17 @@ pipeline {
     post {
         success {
             echo 'Pipeline executed successfully!'
+            mail to: 'henrysday22@gmail.com',
+                 subject: "SUCCESS: Jenkins Pipeline - ${env.JOB_NAME}",
+                 body: "The Jenkins pipeline '${env.JOB_NAME}' has completed successfully.\n\nCheck Jenkins for more details.",
+                 attachLog: true
         }
         failure {
             echo 'Pipeline execution failed.'
+            mail to: 'henrysday22@gmail.com',
+                 subject: "FAILURE: Jenkins Pipeline - ${env.JOB_NAME}",
+                 body: "The Jenkins pipeline '${env.JOB_NAME}' has failed.\n\nCheck Jenkins for more details.",
+                 attachLog: true
         }
     }
 }
