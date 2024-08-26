@@ -4,13 +4,13 @@ pipeline {
         stage('Build') {
             steps {
                 echo 'Building the code...'
-                // Add build steps here, e.g., sh 'mvn clean package'
+                // Add build steps here
             }
         }
         stage('Unit and Integration Tests') {
             steps {
                 echo 'Running tests...'
-                // Add test steps here
+                // Add testing steps here
             }
         }
         stage('Code Analysis') {
@@ -21,7 +21,7 @@ pipeline {
         }
         stage('Security Scan') {
             steps {
-                echo 'Scanning code for vulnerabilities...'
+                echo 'Performing security scan...'
                 // Add security scan steps here
             }
         }
@@ -34,7 +34,7 @@ pipeline {
         stage('Integration Tests on Staging') {
             steps {
                 echo 'Running integration tests on staging...'
-                // Add integration test steps here
+                // Add staging tests here
             }
         }
         stage('Deploy to Production') {
@@ -49,15 +49,13 @@ pipeline {
             echo 'Pipeline executed successfully!'
             mail to: 'henrysday22@gmail.com',
                  subject: "SUCCESS: Jenkins Pipeline - ${env.JOB_NAME}",
-                 body: "The Jenkins pipeline '${env.JOB_NAME}' has completed successfully.\n\nCheck Jenkins for more details.",
-                 attachLog: true
+                 body: "The Jenkins pipeline '${env.JOB_NAME}' has completed successfully.\n\nCheck Jenkins for more details."
         }
         failure {
             echo 'Pipeline execution failed.'
             mail to: 'henrysday22@gmail.com',
                  subject: "FAILURE: Jenkins Pipeline - ${env.JOB_NAME}",
-                 body: "The Jenkins pipeline '${env.JOB_NAME}' has failed.\n\nCheck Jenkins for more details.",
-                 attachLog: true
+                 body: "The Jenkins pipeline '${env.JOB_NAME}' has failed.\n\nCheck Jenkins for more details."
         }
     }
 }
