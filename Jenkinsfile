@@ -47,12 +47,16 @@ pipeline {
      post {
         always {
             script {
+                // Capture the build log into a variable inside the script block
+                def log = currentBuild.rawBuild.getLog(9999).join("\n")
+                
+                // Send an email with the build log in the body and a link to the console output
                 emailext(
                     to: 'henrysday22@gmail.com',
                     subject: "$PROJECT_NAME - Build # $BUILD_NUMBER - $BUILD_STATUS",
                     body: """
                         <p>Build # $BUILD_NUMBER - $BUILD_STATUS</p>
-                        <p>${BUILD_LOG, maxLines=9999, escapeHtml=false}</p>
+                        <pre>${log}</pre>
                         <p>Check console output at <a href="$BUILD_URL">$BUILD_URL</a> to view the results.</p>
                     """,
                     mimeType: 'text/html'
