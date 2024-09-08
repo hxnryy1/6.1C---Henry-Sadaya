@@ -44,13 +44,14 @@ pipeline {
             }
         }
     }
-    post {
+post {
         success {
             echo 'Pipeline executed successfully!'
 
             script {
+                
                 def logFile = "${env.WORKSPACE}/pipeline.log"
-                writeFile file: logFile, text: currentBuild.rawBuild.getLog().join("\n")
+                writeFile file: logFile, text: currentBuild.rawBuild.getLog(1000).join("\n")
 
                 mail to: 'henrysday22@gmail.com',
                      subject: "SUCCESS: Jenkins Pipeline - ${env.JOB_NAME}",
@@ -64,7 +65,7 @@ pipeline {
 
             script {
                 def logFile = "${env.WORKSPACE}/pipeline.log"
-                writeFile file: logFile, text: currentBuild.rawBuild.getLog().join("\n")
+                writeFile file: logFile, text: currentBuild.rawBuild.getLog(1000).join("\n")
 
                 mail to: 'henrysday22@gmail.com',
                      subject: "FAILURE: Jenkins Pipeline - ${env.JOB_NAME}",
