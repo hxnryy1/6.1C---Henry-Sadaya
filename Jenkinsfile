@@ -45,28 +45,33 @@ pipeline {
         }
     }
     post {
-        always {
-            echo 'Pipeline completed. Checking email...'
-        }
         success {
             echo 'Pipeline executed successfully!'
-            emailext(
-                to: 'henrysday22@gmail.com',
-                subject: "SUCCESS: Jenkins Pipeline - ${env.JOB_NAME}",
-                body: """<p>The Jenkins pipeline '${env.JOB_NAME}' has completed successfully.</p>
-                         <p>Please find the logs attached.</p>""",
-                attachLog: true
-            )
+
+            script {
+                def logFile = "${env.WORKSPACE}/pipeline.log"
+                writeFile file: logFile, text: currentBuild.rawBuild.getLog().join("\n")
+
+                mail to: 'henrysday22@gmail.com',
+                     subject: "SUCCESS: Jenkins Pipeline - ${env.JOB_NAME}",
+                     body: "The Jenkins pipeline '${env.JOB_NAME}' has completed successfully. The log is attached.",
+                     attachLog: false, // This only sends logs inline, which we disable here
+                     attachmentsPattern: "pipeline.log"
+            }
         }
         failure {
-            echo 'Pipeline failed.'
-            emailext(
-                to: 'henrysday22@gmail.com',
-                subject: "FAILURE: Jenkins Pipeline - ${env.JOB_NAME}",
-                body: """<p>The Jenkins pipeline '${env.JOB_NAME}' has failed.</p>
-                         <p>Please find the logs attached for debugging purposes.</p>""",
-                attachLog: true
-            )
+            echo 'Pipeline execution failed.'
+
+            script {
+                def logFile = "${env.WORKSPACE}/pipeline.log"
+                writeFile file: logFile, text: currentBuild.rawBuild.getLog().join("\n")
+
+                mail to: 'henrysday22@gmail.com',
+                     subject: "FAILURE: Jenkins Pipeline - ${env.JOB_NAME}",
+                     body: "The Jenkins pipeline '${env.JOB_NAME}' has failed. The log is attached for debugging purposes.",
+                     attachLog: false,
+                     attachmentsPattern: "pipeline.log"
+            }
         }
     }
 }
