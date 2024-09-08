@@ -45,23 +45,12 @@ pipeline {
         }
     }
      post {
-        always {
-            script {
-                // Capture the build log into a variable
-                def log = currentBuild.rawBuild.getLog(1000).join("\n")
-                
-                // Send email notification
-                emailext(
-                    to: 'henrysday22@gmail.com',
-                    subject: "${env.JOB_NAME} - Build # ${env.BUILD_NUMBER} - ${currentBuild.currentResult}",
-                    body: """
-                        <p>Build # ${env.BUILD_NUMBER} - ${currentBuild.currentResult}</p>
-                        <pre>${log}</pre>
-                        <p>Check console output at <a href="${env.BUILD_URL}">${env.BUILD_URL}</a> to view the results.</p>
-                    """,
-                    mimeType: 'text/html'
-                )
-            }
-        }
+    always {
+        emailext(
+            to: 'henrysday22@gmail.com',
+            subject: "Build status: ${currentBuild.currentResult}",
+            body: "Build log is attached",
+            attachLog: true
+        )
     }
 }
