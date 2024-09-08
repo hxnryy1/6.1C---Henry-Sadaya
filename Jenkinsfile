@@ -44,13 +44,14 @@ pipeline {
             }
         }
     }
-     post {
-    always {
-        emailext(
-            to: 'henrysday22@gmail.com',
-            subject: "Build status: ${currentBuild.currentResult}",
-            body: "Build log is attached",
-            attachLog: true
-        )
+    post {
+        always {
+            emailext(
+                to: 'henrysday22@gmail.com',
+                subject: "Build status: ${currentBuild.currentResult}",
+                body: "Build log is attached",
+                attachLog: true
+            )
+        }
     }
 }
