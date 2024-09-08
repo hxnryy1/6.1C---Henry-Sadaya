@@ -44,35 +44,18 @@ pipeline {
             }
         }
     }
-post {
+     post {
         success {
             echo 'Pipeline executed successfully!'
-
-            script {
-                
-                def logFile = "${env.WORKSPACE}/pipeline.log"
-                writeFile file: logFile, text: currentBuild.rawBuild.getLog(1000).join("\n")
-
-                mail to: 'henrysday22@gmail.com',
-                     subject: "SUCCESS: Jenkins Pipeline - ${env.JOB_NAME}",
-                     body: "The Jenkins pipeline '${env.JOB_NAME}' has completed successfully. The log is attached.",
-                     attachLog: false, // This only sends logs inline, which we disable here
-                     attachmentsPattern: "pipeline.log"
-            }
+            mail to: 'henrysday22@gmail.com',
+                 subject: "SUCCESS: Jenkins Pipeline - ${env.JOB_NAME}",
+                 body: "The Jenkins pipeline '${env.JOB_NAME}' has completed successfully.\n\nCheck Jenkins for more details."
         }
         failure {
             echo 'Pipeline execution failed.'
-
-            script {
-                def logFile = "${env.WORKSPACE}/pipeline.log"
-                writeFile file: logFile, text: currentBuild.rawBuild.getLog(1000).join("\n")
-
-                mail to: 'henrysday22@gmail.com',
-                     subject: "FAILURE: Jenkins Pipeline - ${env.JOB_NAME}",
-                     body: "The Jenkins pipeline '${env.JOB_NAME}' has failed. The log is attached for debugging purposes.",
-                     attachLog: false,
-                     attachmentsPattern: "pipeline.log"
-            }
+            mail to: 'henrysday22@gmail.com',
+                 subject: "FAILURE: Jenkins Pipeline - ${env.JOB_NAME}",
+                 body: "The Jenkins pipeline '${env.JOB_NAME}' has failed.\n\nCheck Jenkins for more details."
         }
     }
 }
