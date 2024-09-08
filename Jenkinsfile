@@ -45,6 +45,9 @@ pipeline {
         }
     }
     post {
+        always {
+            echo 'Pipeline completed. Checking email...'
+        }
         success {
             echo 'Pipeline executed successfully!'
             emailext(
@@ -56,15 +59,14 @@ pipeline {
             )
         }
         failure {
-            echo 'Pipeline execution failed.'
+            echo 'Pipeline failed.'
             emailext(
                 to: 'henrysday22@gmail.com',
                 subject: "FAILURE: Jenkins Pipeline - ${env.JOB_NAME}",
                 body: """<p>The Jenkins pipeline '${env.JOB_NAME}' has failed.</p>
                          <p>Please find the logs attached for debugging purposes.</p>""",
                 attachLog: true
-
-                )
+            )
         }
     }
 }
